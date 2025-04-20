@@ -1,0 +1,648 @@
+:root {
+  --main-bg-color: #0d0d0d;
+  --neon-blue: orange;
+  --neon-pink: #330833;
+  --neon-purple: #423644;
+  --light-glow: rgba(0, 255, 255, 0.4);
+  --dark-glow: rgba(0, 255, 255, 0.2);
+  --highlight: #ffeb3b;
+  --error: #f44336;
+  --arcade-red: #FFFF00;
+
+  --button-bg: linear-gradient(to right, orange,gray, orange);
+  --button-glow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+  --button-hover-glow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink);
+
+  --border-glow: 2px solid var(--neon-blue);
+  --glow-intensity: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+}
+
+
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  font-family: 'Press Start 2P', cursive;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #000000, #1a1a2e, #000000 80%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.5s ease-in-out;
+  scroll-behavior: smooth;
+}
+
+
+body::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  animation: starMove 100s linear infinite;
+}
+
+.stars {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 2s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(20px);
+  }
+}
+
+.stars {
+  animation: twinkle 2s infinite ease-in-out, drift 8s infinite alternate ease-in-out;
+}
+
+/* Character Selection */
+#characterSelection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient( black, gray, black);
+  padding: 25px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 800px;
+  animation: floatEffect 3s ease-in-out infinite, colorChange 4s linear infinite;
+}
+
+.character-options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 70px;
+  margin: 30px 0;
+}
+
+.character-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: white;
+  width: 130px;
+  height: 170px;
+  padding: 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s, filter 0.3s;
+  gap: 15px;
+  animation: floatEffect 2.5s ease-in-out infinite, bounce 1.5s ease-in-out infinite;
+  box-shadow: var(--glow-intensity);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+
+
+.character-option:hover {
+  transform: scale(1.08) rotateY(8deg) rotateX(3deg) translateY(-10px);
+  box-shadow: 0 0 18px var(--arcade-red), 0 0 35px var(--arcade-red);
+  filter: brightness(1.3) saturate(1.4);
+}
+
+.character-option img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  border-radius: 5px;
+  transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+}
+
+.selected {
+  background-color: red;
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 100, 100, 0.7);
+  filter: brightness(1.5);
+}
+
+/* Main Menu */
+#mainMenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, #000, #111);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  gap: 20px;
+  animation: fadeIn 0.6s ease-in-out, flicker 0.5s ease-in-out infinite;
+}
+
+#mainMenu h1 {
+  font-size: 40px;
+  margin-bottom: 30px;
+  text-shadow: 0 0 12px #fff, 0 0 20px #ff0, 0 0 35px #f0f;
+  animation: float 4s ease-in-out infinite, flickerText 3s infinite alternate;
+  background: linear-gradient(to right, yellow, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+
+}
+
+button, #backbutton, #restartButton{
+  background: var(--button-bg);
+  color: white;
+  border: var(--border-glow);
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: var(--glow-intensity);
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+  animation: glowPulsePixar 2s ease-in-out infinite alternate;
+  
+}
+
+
+button:hover {
+  transform: scale(1.1) rotateY(5deg);
+  box-shadow: var(--button-hover-glow);
+}
+
+/* Button Styling */
+  #backButton, #restartButton {
+  font-size: 22px;
+  padding: 20px 30px;
+  cursor: pointer;
+  border-radius: 20px;
+  font-family: 'Press Start 2P', cursive;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(145deg, orange, gray, orange);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 8px rgba(255,255,255,0.2), 0 8px 20px rgba(255, 100, 0, 0.5);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+  animation: floatButton 3s ease-in-out infinite, glowPulsePixar 2s ease-in-out infinite alternate;
+}
+
+button:hover, #backButton:hover, #restartButton:hover {
+  transform: scale(1.15) rotateZ(3deg);
+  background: linear-gradient(145deg, #fff176, #ff1744, #ff9100);
+  box-shadow: 0 0 25px #ff5722, 0 0 45px #ffc107, inset 0 0 12px rgba(255,255,255,0.3);
+  filter: brightness(1.2) saturate(1.3);
+}
+
+/* Active (Pressed) Effect */
+button:active, #backButton:active, #restartButton:active {
+  transform: scale(0.95) rotateZ(4deg);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Magical Glow and Shimmer Overlay */
+button::after, #backButton::after, #restartButton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  animation: shimmer 2.5s infinite;
+}
+
+
+#gameContainer {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 15px;
+  animation: fadeIn 0.5s ease-in-out;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* UI and Health Bar */
+.top-ui {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  z-index: 10;
+}
+
+.health-bar {
+  width: 610px;
+  height: 50px;
+  background-color: #222;
+  border: 2px solid white;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 0 5px var(--highlight);
+}
+
+#playerHealth, #enemyHealth {
+  width: 100%;
+  height: 100%;
+  transition: width 0.4s ease-in-out, background 0.3s ease;
+  
+}
+
+#playerHealth {
+  background: linear-gradient(to right, red, orange);
+}
+
+#enemyHealth {
+  background: linear-gradient(to right, red, orange);
+}
+
+
+
+@keyframes crtFlicker {
+  0% { opacity: 0.03; }
+  100% { opacity: 0.08; }
+}
+
+@keyframes lightningFlash {
+  0% { background-color: rgba(255, 255, 255, 0); }
+  5% { background-color: rgba(255, 255, 255, 0.2); }
+  10% { background-color: rgba(255, 255, 255, 0); }
+  100% { background-color: rgba(255, 255, 255, 0); }
+}
+
+body.lightning {
+  animation: lightningFlash 0.3s ease-in-out;
+}
+
+#lightningFlash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: white;
+  opacity: 0;
+  z-index: 999;
+  animation: lightningFlash 10s infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+
+/* Timer Styling */
+#winner-text, #timer {
+  font-size: 35px;
+  left: 50%;
+  transform: translateX(-50%, 50%);
+  color: white;
+  text-shadow: 0 0 8px yellow, 0 0 15px orange;
+  padding: 5px 10px;
+  border: 3px solid white;
+  border-radius: 10px;
+  background: black;
+  box-shadow: 0 0 20px white;
+  animation: pulseTimer 2s infinite;
+  pointer-events: none;
+  z-index: 2;
+  font-weight: bold;
+  opacity: 1;
+}
+
+#winner-text {
+
+  top:80px;
+  font-size: 36px;
+  color: #ffea00;
+
+}
+
+@keyframes pulseScale {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  border-radius: 15px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hit-flash {
+  animation: hitFlash 0.2s ease-in-out;
+}
+
+/* Game Over Screen */
+#gameOverScreen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  transform: scale(0.9);
+}
+
+#gameOverScreen.show {
+  opacity: 1;
+  transform: scale(1.05);
+  animation: popIn 0.6s ease forwards, glowFlash 1.5s ease-in-out infinite;
+}
+
+
+  #roundDisplay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff9900, 0 0 30px #fff000;
+    z-index: 1000;
+    display: none; /* toggle visibility in JS */
+    animation: popIn 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+
+.arcade-button {
+  background: var(--button-bg);
+  color: white;
+  border: var(--border-glow);
+  padding: 20px 40px;
+  font-size: 1.2rem;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: var(--glow-intensity);
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+  animation: glowPulsePixar 2s ease-in-out infinite alternate;
+}
+
+.arcade-button:hover {
+  transform: scale(1.1) rotateY(5deg);
+  box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink);
+}
+
+#finalScore {
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: white;
+}
+
+
+.arcade-button {
+  padding: 15px 30px;
+  font-size: 1rem;
+}
+
+
+
+@keyframes popFade {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+  50% { box-shadow: 0 0 18px rgba(255,255,255,0.7); }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.95; }
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+  100% { text-shadow: 0 0 25px rgba(255, 255, 255, 1); }
+}
+
+@keyframes floatEffect {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes colorChange {
+  0% { background: linear-gradient(to right, gray, black, gray); }
+  50% { background: linear-gradient(to right, black, #444, black); }
+  100% { background: linear-gradient(to right, #444, black, #444); }
+}
+
+@keyframes flickerText {
+  0%, 100% { opacity: 1; text-shadow: 0 0 10px #fff; }
+  25% { opacity: 0.95; text-shadow: 0 0 15px #ff0; }
+  50% { opacity: 1; text-shadow: 0 0 25px #f00; }
+  75% { opacity: 0.98; text-shadow: 0 0 20px #ffa500; }
+}
+
+@keyframes screenShake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-5px, 5px); }
+  50% { transform: translate(5px, -5px); }
+  75% { transform: translate(-5px, -5px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes floatButton {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes glowPulsePixar {
+  0% {
+    box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-purple);
+  }
+  100% {
+    box-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+@keyframes shineEffect {
+  0% {
+    text-shadow: 0 0 10px yellow, 0 0 20px red, 0 0 30px yellow, 0 0 40px red;
+  }
+  50% {
+    text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px yellow, 0 0 40px orange;
+  }
+  100% {
+    text-shadow: 0 0 10px yellow, 0 0 20px red, 0 0 30px yellow, 0 0 40px red;
+  }
+}
+
+  @media (max-width: 600px) {
+    .character-options {
+      gap: 30px;
+    }
+}
+
+/* Neon Particle Bursts */
+.particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff00cc, #ffcc00, #00f0ff);
+  box-shadow: 0 0 8px #fff, 0 0 15px #0ff;
+  animation: particleMove 3s linear infinite, particleGlow 1.5s ease-in-out infinite alternate;
+  opacity: 0.7;
+}
+
+@keyframes particleMove {
+  from {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(-100vh) translateX(30px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes particleGlow {
+  0% {
+    box-shadow: 0 0 5px #fff, 0 0 10px #ff0, 0 0 15px #0ff;
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 10px #0ff, 0 0 20px #f0f, 0 0 30px #ff0;
+    transform: scale(1.3);
+  }
+}
+
+.warning {
+  color: red;
+  animation: flash 0.5s infinite alternate;
+}
+
+@keyframes flash {
+  from { opacity: 1; }
+  to { opacity: 0.5; }
+}
+
+
+
+
+
